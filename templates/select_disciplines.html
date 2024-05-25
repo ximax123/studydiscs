@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выбор дисциплин</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #0066ff, #00ccff);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            width: 600px;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .form-group label {
+            font-size: 14px;
+            flex-grow: 1;
+        }
+        .form-group input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .submit-btn {
+            width: calc(100% - 40px);
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 20px;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+        .semester {
+            margin-bottom: 20px;
+        }
+        .ticket-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 16px;
+            color: #fff;
+        }
+        .description {
+            display: none;
+            margin-left: 20px;
+            color: #ddd;
+        }
+        .qr-code {
+            max-width: 100%;
+            height: auto;
+            max-width: 150px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+            }
+        }
+        .alert {
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .closebtn:hover {
+            color: black;
+        }
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            padding-left: 10px;
+        }
+        .toggle-btn:hover {
+            color: #0056b3;
+        }
+        .toggle-btn:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+<a href="{{ url_for('login') }}" class="submit-btn" style="background-color: #007bff; position: absolute; top: 20px; left: 20px; width: auto; padding: 5px 10px;">Главная</a>
+<div class="ticket-number">Студенческий билет: {{ session['student_id'] }}</div>
+
+<div class="container" id="container">
+    <h1>Выбор дисциплин</h1>
+    {% if success %}
+        <div class="alert">
+            Дисциплины успешно выбраны!
+        </div>
+    {% endif %}
+    <form method="post" id="disciplines-form">
+        <div class="semester">
+            <h2>Первый семестр</h2>
+            {% for discipline in first_semester_disciplines %}
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="disciplines" value="{{ discipline['discipline_id'] }}">
+                        {{ discipline['name'] }}
+                    </label>
+                    <button type="button" class="toggle-btn" onclick="toggleDescription('{{ discipline['discipline_id'] }}')">▼</button>
+                </div>
+                <div class="description" id="description_{{ discipline['discipline_id'] }}">
+                    <p>{{ discipline['description'] }}</p>
+                    <a href="{{ discipline['link'] }}" target="_blank">
+                        <img src="{{ url_for('static', filename='qr_codes/' + discipline['discipline_id'] + '.png') }}" class="qr-code" alt="QR Code">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="semester">
+            <h2>Второй семестр</h2>
+            {% for discipline in second_semester_disciplines %}
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="disciplines" value="{{ discipline['discipline_id'] }}">
+                        {{ discipline['name'] }}
+                    </label>
+                    <button type="button" class="toggle-btn" onclick="toggleDescription('{{ discipline['discipline_id'] }}')">▼</button>
+                </div>
+                <div class="description" id="description_{{ discipline['discipline_id'] }}">
+                    <p>{{ discipline['description'] }}</p>
+                    <a href="{{ discipline['link'] }}" target="_blank">
+                        <img src="{{ url_for('static', filename='qr_codes/' + discipline['discipline_id'] + '.png') }}" class="qr-code" alt="QR Code">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="submit-btn">Сохранить выбор</button>
+    </form>
+</div>
+
+<script>
+    function toggleDescription(id) {
+        var desc = document.getElementById('description_' + id);
+        if (desc.style.display === 'none' || desc.style.display === '') {
+            desc.style.display = 'block';
+        } else {
+            desc.style.display = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>

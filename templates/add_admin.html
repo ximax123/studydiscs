@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Назначить Администратора</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #0066ff, #00ccff);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            width: 400px;
+            text-align: center;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .submit-btn, .home-btn, .back-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .home-btn {
+            background-color: #007bff;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: auto;
+            padding: 10px 20px;
+        }
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: auto;
+            padding: 10px 20px;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+        .home-btn:hover {
+            background-color: #0056b3;
+        }
+        .back-btn:hover {
+            background-color: #218838;
+        }
+        .success-message {
+            color: #28a745;
+            margin-top: 10px;
+        }
+        .nav-bar {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+    </style>
+    <script>
+        function validateForm() {
+            const adminId = document.getElementById('admin-id').value;
+            const fullName = document.getElementById('full-name').value;
+            const role = document.getElementById('role').value;
+            
+            const adminIdRegex = /^[0-9]+$/;
+            const fullNameRegex = /^[A-Za-zА-Яа-яЁё\s]+$/;
+            const roleRegex = /^[1-2]$/;
+
+            if (!adminIdRegex.test(adminId)) {
+                alert('Админ-код может содержать только цифры.');
+                return false;
+            }
+            if (!fullNameRegex.test(fullName)) {
+                alert('Логин может содержать только буквы.');
+                return false;
+            }
+            if (!roleRegex.test(role)) {
+                alert('Роль может быть только 1 или 2.');
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+
+<a href="{{ url_for('login') }}" class="home-btn">Главная</a>
+<a href="{{ url_for('admin2') }}" class="back-btn">Назад</a>
+
+<div class="container">
+    <h1>Назначить Администратора</h1>
+    <form method="post" onsubmit="return validateForm()">
+        <div class="form-group">
+            <label for="admin-id">Админ-код:</label>
+            <input type="text" id="admin-id" name="admin_id" required>
+        </div>
+        <div class="form-group">
+            <label for="full-name">Логин:</label>
+            <input type="text" id="full-name" name="full_name" required>
+        </div>
+        <div class="form-group">
+            <label for="role">Роль:</label>
+            <input type="text" id="role" name="role" required>
+        </div>
+        <button type="submit" class="submit-btn">Назначить</button>
+    </form>
+    {% if success %}
+    <div class="success-message">Администратор успешно назначен!</div>
+    {% endif %}
+</div>
+
+</body>
+</html>

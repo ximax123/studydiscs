@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статистика</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #0066ff, #00ccff);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .stats-section {
+            margin-bottom: 20px;
+        }
+        .stats-section h2 {
+            margin-bottom: 10px;
+        }
+        .stats-section p {
+            margin: 5px 0;
+        }
+        .nav-button {
+            position: absolute;
+            top: 20px;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .nav-button:hover {
+            background-color: #0056b3;
+        }
+        .nav-button.left {
+            left: 20px;
+        }
+        .nav-button.right {
+            right: 20px;
+            background-color: #28a745;
+        }
+        .nav-button.right:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<a href="{{ url_for('login') }}" class="nav-button left">Главная</a>
+<a href="{{ url_for('admin2') }}" class="nav-button right">Назад</a>
+
+<div class="container">
+    <h1>Статистика</h1>
+    <div class="stats-section">
+        <h2>Общее количество пользователей:</h2>
+        <p>Студентов: {{ total_users.total_students }}</p>
+        <p>Администраторов: {{ total_users.total_admins }}</p>
+    </div>
+    <div class="stats-section">
+        <h2>Количество студентов по курсам:</h2>
+        {% for course, count in students_by_course.items() %}
+        <p>Курс {{ course }}: {{ count }}</p>
+        {% endfor %}
+    </div>
+    <div class="stats-section">
+        <h2>Количество студентов, выбравших дисциплины:</h2>
+        <p>{{ students_with_disciplines }}</p>
+    </div>
+    <div class="stats-section">
+        <h2>Популярные дисциплины:</h2>
+        {% for discipline, count in popular_disciplines.items() %}
+        <p>{{ discipline }}: {{ count }}</p>
+        {% endfor %}
+    </div>
+    <div class="stats-section">
+        <h2>Активность администраторов:</h2>
+        {% for action, count in admin_activity.items() %}
+        <p>{{ action }}: {{ count }}</p>
+        {% endfor %}
+    </div>
+</div>
+
+</body>
+</html>
